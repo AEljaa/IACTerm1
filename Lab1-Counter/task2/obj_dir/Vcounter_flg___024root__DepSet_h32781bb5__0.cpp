@@ -22,10 +22,12 @@ VL_INLINE_OPT void Vcounter_flg___024root___nba_sequent__TOP__0(Vcounter_flg___0
                                                   & ((IData)(vlSelf->en)
                                                       ? 
                                                      ((IData)(vlSelf->count) 
-                                                      - (IData)(1U))
+                                                      + (IData)(vlSelf->en))
                                                       : 
-                                                     ((IData)(1U) 
-                                                      + (IData)(vlSelf->count)))));
+                                                     ((IData)(vlSelf->count) 
+                                                      - 
+                                                      (1U 
+                                                       & (~ (IData)(vlSelf->en)))))));
 }
 
 void Vcounter_flg___024root___eval_nba(Vcounter_flg___024root* vlSelf) {

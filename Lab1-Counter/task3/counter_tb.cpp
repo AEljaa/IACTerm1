@@ -24,6 +24,7 @@ int main(int argc,char **argv, char **env){
     top->ld=0;
     top->v=0;
 
+    vbdSetMode(1);
     for (i=0; i<10000; i++){
 
         for (clk =0; clk<2; clk++){
@@ -37,7 +38,13 @@ int main(int argc,char **argv, char **env){
         vbdCycle(i+1);
         
         top->rst = (i<2) | (i==15); // condition that will cause rst to = 1
-        top->v=vbdValue();
+        if(vbdFlag()){
+            top->ld=1;
+            top->v=vbdValue();
+        }
+        else {
+            top->ld=0;
+        }
         if (Verilated::gotFinish()) exit(0);
 
     }
