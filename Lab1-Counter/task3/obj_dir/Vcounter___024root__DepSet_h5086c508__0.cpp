@@ -20,7 +20,9 @@ VL_INLINE_OPT void Vcounter___024root___nba_sequent__TOP__0(Vcounter___024root* 
     // Body
     vlSelf->count = ((IData)(vlSelf->rst) ? 0U : (0xffU 
                                                   & ((IData)(vlSelf->ld)
-                                                      ? (IData)(vlSelf->v)
+                                                      ? 
+                                                     ((IData)(vlSelf->count) 
+                                                      + (IData)(vlSelf->v))
                                                       : 
                                                      ((IData)(1U) 
                                                       + (IData)(vlSelf->count)))));
