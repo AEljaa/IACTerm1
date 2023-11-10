@@ -12,7 +12,7 @@ typedef enum {S0,S1,S2,S3,S4,S5,S6,S7,S8} states;
 states current_state, next_state;
 
 //state transition
-always_ff @(posedge clk, posedge rst)
+always_ff @(posedge clk)
     if (rst)
         current_state <= S0;
     else
@@ -53,17 +53,16 @@ always_comb
 //output logic
 always_comb
     case(current_state)
-       
         S0: data_out=8'b0;
-        S1: data_out <= {8'b00000001};
-        S2: data_out <= {8'b00000011};
-        S3: data_out <= {8'b00000111};
-        S4: data_out <= {8'b00001111};
-        S5: data_out <= {8'b00011111};
-        S6: data_out <= {8'b00111111};
-        S7: data_out <= {8'b01111111};
-        S8: data_out <= {8'b11111111};
-        default: data_out <= {8'b00000000};
+        S1: data_out[0] = 1'b1;
+        S2: data_out[1] = 1'b1;
+        S3: data_out[2] = 1'b1;
+        S4: data_out[3] = 1'b1;
+        S5: data_out[4] = 1'b1;
+        S6: data_out[5] = 1'b1;
+        S7: data_out[6] = 1'b1;
+        S8: data_out[7] = 1'b1;
+        default: data_out = 8'b0;
     endcase
 endmodule
 
