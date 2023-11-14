@@ -1,6 +1,6 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
-#include "Vdelay.h"
+#include "Vtop.h"
 
 #include "vbuddy.cpp"     // include vbuddy code
 #define MAX_SIM_CYC 100000
@@ -12,12 +12,12 @@ int main(int argc, char **argv, char **env) {
 
   Verilated::commandArgs(argc, argv);
   // init top verilog instance
-  Vdelay * top = new Vdelay;
+  Vtop * top = new Vtop;
   // init trace dump
   Verilated::traceEverOn(true);
   VerilatedVcdC* tfp = new VerilatedVcdC;
   top->trace (tfp, 99);
-  tfp->open ("delay.vcd");
+  tfp->open ("top.vcd");
  
   // init Vbuddy
   if (vbdOpen()!=1) return(-1);
@@ -28,7 +28,6 @@ int main(int argc, char **argv, char **env) {
   top->clk = 1;
   top->rst = 0;
   top->trigger = 0;
-  top->n = vbdValue();
   
   // run simulation for MAX_SIM_CYC clock cycles
   for (simcyc=0; simcyc<MAX_SIM_CYC; simcyc++) {
@@ -38,16 +37,15 @@ int main(int argc, char **argv, char **env) {
       top->clk = !top->clk;
       top->eval ();
     }
+    vbdHex(2, (int(top->data_out) >>4)  & 0xF);
+    vbdHex(1, top->data_out & 0xF);        
+    vbdBar(top->data_out);
 
-    // Display toggle neopixel
-    if (top->time_out) {
-      vbdBar(lights);
-      lights = lights ^ 0xFF;
-    }
+ 
     // set up input signals of testbench
     top->rst = (simcyc < 2);    // assert reset for 1st cycle
     top->trigger = vbdFlag();
-    top->n = vbdValue();
+    top->N = 24;
     vbdCycle(simcyc);
 
     if (Verilated::gotFinish())  exit(0);
