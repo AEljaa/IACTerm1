@@ -21,9 +21,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
     CData/*0:0*/ top__DOT__tick_time;
     CData/*0:0*/ top__DOT__cmd_seq;
     CData/*0:0*/ top__DOT__cmd_delay;
-    CData/*0:0*/ top__DOT__mux_val;
+    CData/*0:0*/ top__DOT____Vcellinp__f1_lights__en;
+    CData/*6:0*/ top__DOT____Vcellout__lfsr__data_out;
     CData/*6:0*/ top__DOT__lfsr__DOT__sreg;
-    CData/*6:0*/ __Vdly__top__DOT__lfsr__DOT__sreg;
     CData/*0:0*/ __Vtrigprevexpr___TOP__clk__0;
     CData/*0:0*/ __Vtrigprevexpr___TOP__rst__0;
     CData/*0:0*/ __VactContinue;
@@ -35,9 +35,11 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
     IData/*31:0*/ top__DOT__delay__DOT__current_state;
     IData/*31:0*/ top__DOT__delay__DOT__next_state;
     IData/*31:0*/ __VstlIterCount;
+    IData/*31:0*/ __VicoIterCount;
     IData/*31:0*/ __VactIterCount;
     VlUnpacked<CData/*0:0*/, 3> __Vm_traceActivity;
     VlTriggerVec<1> __VstlTriggered;
+    VlTriggerVec<1> __VicoTriggered;
     VlTriggerVec<2> __VactTriggered;
     VlTriggerVec<2> __VnbaTriggered;
 

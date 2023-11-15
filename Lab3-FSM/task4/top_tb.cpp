@@ -3,6 +3,7 @@
 #include "Vtop.h"
 
 #include "vbuddy.cpp"     // include vbuddy code
+#include <ctime>
 #define MAX_SIM_CYC 100000
 
 int main(int argc, char **argv, char **env) {
@@ -21,8 +22,7 @@ int main(int argc, char **argv, char **env) {
  
   // init Vbuddy
   if (vbdOpen()!=1) return(-1);
-  vbdHeader("L3T2:Delay");
-  vbdSetMode(1);        // Flag mode set to one-shot
+  vbdHeader("L3T4:F1");
 
   // initialize simulation inputs
   top->clk = 1;
@@ -37,11 +37,17 @@ int main(int argc, char **argv, char **env) {
       top->clk = !top->clk;
       top->eval ();
     }
-    vbdHex(2, (int(top->data_out) >>4)  & 0xF);
-    vbdHex(1, top->data_out & 0xF);        
     vbdBar(top->data_out);
-
- 
+    if(top->data_out==0){
+        vbdInitWatch();
+    }
+    if(vbdFlag()){
+        int time=vbdElapsed();
+        vbdHex(1, time & 0xF);        
+        vbdHex(2, (time >> 4) & 0xF);        
+        vbdHex(3, (time >> 8)  & 0xF);        
+        vbdHex(4, (time >> 16) & 0xF);        
+    }
     // set up input signals of testbench
     top->rst = (simcyc < 2);    // assert reset for 1st cycle
     top->trigger = vbdFlag();

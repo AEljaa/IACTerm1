@@ -6,13 +6,13 @@ module lfsr_7b (
 
 logic [7:1] sreg;
 
-always_ff @(posedge clk, posedge rst)
+always_ff @(posedge clk, posedge rst) begin
     if (rst)
         sreg <= 7'b1;
     else 
         sreg <= {sreg[6:1], sreg[7] ^ sreg[3]};
 
-assign data_out = sreg ;
-
+    assign data_out = sreg ;
+end
 endmodule
 
