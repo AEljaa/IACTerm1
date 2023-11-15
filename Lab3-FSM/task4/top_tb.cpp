@@ -27,33 +27,37 @@ int main(int argc, char **argv, char **env) {
   // initialize simulation inputs
   top->clk = 1;
   top->rst = 0;
-  top->trigger = 0;
-  
+  top->trigger = vbdFlag();
+  int prev_trigger=top->trigger; 
   // run simulation for MAX_SIM_CYC clock cycles
-  for (simcyc=0; simcyc<MAX_SIM_CYC; simcyc++) {
+  for (simcyc=0; simcyc<MAX_SIM_CYC; simcyc++) { 
+    // set up input signals of testbench
+    top->rst = (simcyc < 2);    // assert reset for 1st cycle
+    top->N = 24;
+    
     // dump variables into VCD file and toggle clock
     for (tick=0; tick<2; tick++) {
       tfp->dump (2*simcyc+tick);
       top->clk = !top->clk;
       top->eval ();
     }
+    
     vbdBar(top->data_out);
-    if(top->data_out==0){
-        vbdInitWatch();
-    }
-    if(vbdFlag()){
-        int time=vbdElapsed();
-        vbdHex(1, time & 0xF);        
-        vbdHex(2, (time >> 4) & 0xF);        
-        vbdHex(3, (time >> 8)  & 0xF);        
-        vbdHex(4, (time >> 16) & 0xF);        
-    }
-    // set up input signals of testbench
-    top->rst = (simcyc < 2);    // assert reset for 1st cycle
+    
     top->trigger = vbdFlag();
-    top->N = 24;
+    vbdInitWatch();
+    if(top->data_out==0){
+        if(vbdFlag()){//trigger has been pressed
+            int time=vbdElapsed();
+            printf("Time elapsed: %d\n", time);
+            vbdHex(1, time & 0xF);        
+            vbdHex(2, (time >> 4) & 0xF);        
+            vbdHex(3, (time >> 8)  & 0xF);        
+            vbdHex(4, (time >> 16) & 0xF);        
+        }
+    }
+    
     vbdCycle(simcyc);
-
     if (Verilated::gotFinish())  exit(0);
   }
 
