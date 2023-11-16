@@ -42,19 +42,19 @@ int main(int argc, char **argv, char **env) {
       top->eval ();
     }
     
+    top->trigger = vbdFlag();// get the trigger/vbdflag val then output the next seq
+    if(!top->trigger){
+        vbdInitWatch();//start timer -resets if we dont have trigger on since loop would restart
+    }
+
     vbdBar(top->data_out);
-    
-    top->trigger = vbdFlag();
-    vbdInitWatch();
-    if(top->data_out==0){
-        if(vbdFlag()){//trigger has been pressed
+    if(top->data_out==0 && top->trigger){
             int time=vbdElapsed();
             printf("Time elapsed: %d\n", time);
             vbdHex(1, time & 0xF);        
             vbdHex(2, (time >> 4) & 0xF);        
             vbdHex(3, (time >> 8)  & 0xF);        
             vbdHex(4, (time >> 16) & 0xF);        
-        }
     }
     
     vbdCycle(simcyc);
