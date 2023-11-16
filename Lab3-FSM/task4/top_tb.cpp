@@ -49,12 +49,14 @@ int main(int argc, char **argv, char **env) {
 
     vbdBar(top->data_out);
     if(top->data_out==0 && top->trigger){
+        if(vbdFlag()){//trigger has been pressed calcualte elapesed time and display it - not working
             int time=vbdElapsed();
             printf("Time elapsed: %d\n", time);
             vbdHex(1, time & 0xF);        
-            vbdHex(2, (time >> 4) & 0xF);        
-            vbdHex(3, (time >> 8)  & 0xF);        
-            vbdHex(4, (time >> 16) & 0xF);        
+            vbdHex(2, int(time >> 4) & 0xF);        
+            vbdHex(3, int(time >> 8)  & 0xF);        
+            vbdHex(4, int(time >> 16) & 0xF);        
+        }
     }
     
     vbdCycle(simcyc);
